@@ -3,9 +3,22 @@ import pickle
 import pandas as pd
 import plotly.graph_objects as go
 import numpy as np
+import pathlib 
+
+# Configure all paths at the top - works on Windows, Linux, and macOS
+BASE_DIR = pathlib.Path(__file__).resolve().parent.parent  # Project root directory
+DATA_DIR = BASE_DIR / 'data'
+MODEL_DIR = BASE_DIR / 'model'
+ASSETS_DIR = BASE_DIR / 'assets'
+
+# Specific file paths
+DATA_FILE = DATA_DIR / 'breast_cancer_data.csv'
+MODEL_FILE = MODEL_DIR / 'model.pkl'
+SCALER_FILE = MODEL_DIR / 'scaler.pkl'
+CSS_FILE = ASSETS_DIR / 'style.css'
 
 def get_clean_data():
-    data = pd.read_csv("D:/breast-cancer-prediction-ai-model/data/breast_cancer_data.csv")
+    data = pd.read_csv(DATA_FILE)
     data.drop(columns=['Unnamed: 32','id'],axis=1,inplace=True)
     data.diagnosis = data.diagnosis.map({'B':0, 'M':1})
     return data
@@ -159,8 +172,8 @@ def get_radar_chart(input_data):
     return fig
 
 def add_predictions(input_data):
-    model = pickle.load(open('D:/breast-cancer-prediction-ai-model/model/model.pkl', 'rb'))
-    scaler = pickle.load(open('D:/breast-cancer-prediction-ai-model/model/scaler.pkl', 'rb'))
+    model = pickle.load(open(MODEL_FILE, 'rb'))
+    scaler = pickle.load(open(SCALER_FILE, 'rb'))
 
     input_array = np.array(list(input_data.values())).reshape(1,-1)
 
@@ -193,8 +206,8 @@ def main():
 
     )
 
-    with open('D:/Projects/Breast-Cancer-Prediction-model/assets/style.css') as f:
-        st.markdown('<style>{}</style>'.format(f.read()), unsafe_allow_html=True)
+    with open(CSS_FILE, 'r', encoding='utf-8') as f:
+        st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
     input_data = add_slidebar()
     # st.write(input_data)
