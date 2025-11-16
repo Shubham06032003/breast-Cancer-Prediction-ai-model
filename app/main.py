@@ -193,7 +193,7 @@ def main():
 
     )
 
-    with open('D:/breast-cancer-prediction-ai-model/assets/style.css') as f:
+    with open('../assets/style.css') as f:
         st.markdown('<style>{}</style>'.format(f.read()), unsafe_allow_html=True)
 
     input_data = add_slidebar()
