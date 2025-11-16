@@ -175,10 +175,13 @@ def add_predictions(input_data):
     model = pickle.load(open(MODEL_FILE, 'rb'))
     scaler = pickle.load(open(SCALER_FILE, 'rb'))
 
-    input_array = np.array(list(input_data.values())).reshape(1,-1)
+    # Convert to DataFrame instead of numpy array
+    input_df = pd.DataFrame([input_data])
+    
+    # Scale the data
+    input_array_scaled = scaler.transform(input_df)
 
-    input_array_scaled = scaler.transform(input_array)
-
+    # Make predictions
     predictions = model.predict(input_array_scaled)
 
     st.subheader('Cell Cluster Prediction')
